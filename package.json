@@ -1,32 +1,18 @@
 {
-  "name": "cordova-plugin-market",
-  "version": "1.2.0",
-  "description": "Cordova Plugin for access to Google Play and Apple Store within your app",
+  "name": "community-cordova-plugin-market",
+  "version": "1.0.1",
+  "types": "./types/index.d.ts",
+  "readme": "README.md",
+  "repository": "EYALIN/community-cordova-plugin-market/tree/master",
+  "homepage": "https://github.com/EYALIN/community-cordova-plugin-market/tree/master",
+  "funding": "https://github.com/sponsors/EYALIN",
+  "bugs": "https://github.com/EYALIN/community-cordova-plugin-market/issues",
   "cordova": {
-    "id": "cordova-plugin-market",
+    "id": "community-cordova-plugin-market",
     "platforms": [
       "android",
       "ios"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xmartlabs/cordova-plugin-market"
-  },
-  "keywords": [
-    "cordova",
-    "market",
-    "store",
-    "itunes",
-    "play",
-    "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios"
-  ],
-  "author": "Xmartlabs",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xmartlabs/cordova-plugin-market/issues"
-  },
-  "homepage": "https://github.com/xmartlabs/cordova-plugin-market#readme"
+  "description": "A plugin for navigating the store"
 }

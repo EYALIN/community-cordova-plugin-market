@@ -1,0 +1,17 @@
+.git
+.gitignore
+node_modules
+npm-debug.log
+*.xcworkspace
+*.xcodeproj
+*.idea
+*.iml
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+test/
+tests/
+example/
+examples/
+screenshots/

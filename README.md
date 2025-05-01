@@ -1,82 +1,76 @@
-cordova-plugin-market
-=====================
-
-Cordova (PhoneGap) 3.0+ plugin to open an application on native Marketplace app, aka Play Store for Android or App Store for iOS.
-Currently this plugin is compatible only with Android and iOS. Feel free to add support for the platform you need!
-
-# Installation
-
-This plugin follows the Cordova 3.0 plugin spec, so it can be installed through the Cordova CLI in your existing Cordova project:
-
-    cordova plugin add https://github.com/xmartlabs/cordova-plugin-market
-
-# How to use it
-
-When you want to open the device's store do this:
-
-* For Android use the app's package:
-
-    `cordova.plugins.market.open('your.app.package')`
-
-* For iOS, first you need to create an easy-to-read link to your app using App Store Short Links, then use the app name
-
-    `cordova.plugins.market.open('yourappname')`
-
-This will open the link `itms-apps://itunes.apple.com/app/yourappname`. Alternatively you can use your app's id that should be similar to `id284815942`
-
-You can also add a success and failure callback like this:
-
-    var appId = "...";
-    cordova.plugins.market.open(appId, {
-      success: function() {
-        // Your stuff here
-      },
-      error: function() {
-        // Your stuff here
-      }
-    })
-
-  When you want to search for apps with keyword:
-
-  * For Android use the app's package:
-
-      `cordova.plugins.market.search('keyword')`
-
-  * For iOS, no support yet
-
-  You can also add a success and failure callback like this:
-
-      var keyword = "gmail";
-      cordova.plugins.market.search(keyword, {
-        success: function() {
-          // Your stuff here
-        },
-        error: function() {
-          // Your stuff here
-        }
-      })
 
 
-# Release Notes
+[![NPM version](https://img.shields.io/npm/v/community-cordova-plugin-market)](https://www.npmjs.com/package/community-cordova-plugin-market)
 
-Version 1.2
+# community-cordova-plugin-market
 
-* Added API to search apps in Play Store (supported just in Android)
+I dedicate a considerable amount of my free time to developing and maintaining many Cordova plugins for the community ([See the list with all my maintained plugins][community_plugins]).  
+To help ensure this plugin is kept updated, new features are added, and bugfixes are implemented quickly,  
+please donate a couple of dollars (or a little more if you can stretch) as this will help me to afford to dedicate time to its maintenance.  
+Please consider donating if you're using this plugin in an app that makes you money, or if you're asking for new features or priority bug fixes. Thank you!
 
-Version 1.1
+[![](https://img.shields.io/static/v1?label=Sponsor%20Me&style=for-the-badge&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/eyalin)
 
-* Fixed issue due to use old iOS url.
+---
 
-Version 1.0
+## community-cordova-plugin-market
 
-* Initial release: support for open Play Store or iTunes with an Application ID
+`community-cordova-plugin-market` is a Cordova plugin that allows you to open app pages or perform search queries in the Google Play Store (Android) and App Store (iOS).
 
-# Contact
+## Features
 
-If you are using cordova-plugin-market in your app and have any suggestion or question:
+- Open an app’s store page by its ID.
+- Search for apps in the Play Store or App Store using a keyword.
 
-Enrique Galindo, <enrique@xmartlabs.com>
+## Installation
 
-Miguel Revetria, <miguel@xmartlabs.com>
+```bash
+cordova plugin add community-cordova-plugin-market
+```
 
-[@xmartlabs](http://twitter.com/xmartlabs "@xmartlabs")
+## Supported Platforms
+
+- Android
+- iOS
+
+## Usage
+
+To use the plugin, call the `open` or `search` methods. Both return promises.
+
+### Example
+
+```javascript
+document.addEventListener('deviceready', onDeviceReady, false);
+
+function onDeviceReady() {
+    MarketPlugin.open('com.example.app')
+        .then(() => console.log('Opened market page'))
+        .catch(error => console.error('Error:', error));
+
+    MarketPlugin.search('productivity apps')
+        .then(() => console.log('Opened market search'))
+        .catch(error => console.error('Error:', error));
+}
+```
+
+## API
+
+### Methods
+
+#### `open(appId: string): Promise<void>`
+
+Opens the market (App Store or Play Store) to the app page using the provided application ID.
+
+#### `search(query: string): Promise<void>`
+
+Performs a search in the App Store or Play Store using the provided query string.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+[community_plugins]: https://github.com/EYALIN?tab=repositories&q=community&type=&language=&sort=

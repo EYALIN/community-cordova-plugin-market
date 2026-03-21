@@ -13,4 +13,13 @@ export default class MarketManager {
      * @returns A Promise that resolves when the operation is complete.
      */
     search?(query: string): Promise<void>;
+
+    /**
+     * Requests an in-app review dialog.
+     * On iOS: Uses SKStoreReviewController (native App Store rating dialog).
+     * On Android: Uses Google Play In-App Review API.
+     * Note: The OS may choose not to show the dialog (e.g., if shown too recently).
+     * @returns A Promise that resolves when the request is complete.
+     */
+    requestReview(): Promise<void>;
 }

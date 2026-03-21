@@ -1,9 +1,15 @@
 package marketplugin;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
+
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 
 import org.apache.cordova.*;
 
@@ -22,6 +28,9 @@ public class MarketPlugin extends CordovaPlugin {
             } else if ("search".equals(action)) {
                 String query = args.getString(0);
                 search(query, callbackContext);
+                return true;
+            } else if ("requestReview".equals(action)) {
+                requestReview(callbackContext);
                 return true;
             } else {
                 callbackContext.error("Invalid action: " + action);
@@ -75,6 +84,27 @@ public class MarketPlugin extends CordovaPlugin {
             }
         } catch (UnsupportedEncodingException e) {
             callbackContext.error("Encoding error: " + e.getMessage());
+        }
+    }
+
+    private void requestReview(CallbackContext callbackContext) {
+        try {
+            Activity activity = cordova.getActivity();
+            ReviewManager manager = ReviewManagerFactory.create(activity);
+            Task<ReviewInfo> request = manager.requestReviewFlow();
+            request.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ReviewInfo reviewInfo = task.getResult();
+                    Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
+                    flow.addOnCompleteListener(flowTask -> {
+                        callbackContext.success();
+                    });
+                } else {
+                    callbackContext.error("Review flow request failed");
+                }
+            });
+        } catch (Exception e) {
+            callbackContext.error("Error launching review: " + e.getMessage());
         }
     }
 }

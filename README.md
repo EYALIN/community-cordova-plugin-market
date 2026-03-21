@@ -21,6 +21,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 
 - Open an app’s store page by its ID.
 - Search for apps in the Play Store or App Store using a keyword.
+- Request an in-app review dialog (iOS: SKStoreReviewController, Android: Google Play In-App Review API).
 
 ## Installation
 
@@ -35,7 +36,7 @@ cordova plugin add community-cordova-plugin-market
 
 ## Usage
 
-To use the plugin, call the `open` or `search` methods. Both return promises.
+To use the plugin, call the `open`, `search`, or `requestReview` methods. All return promises.
 
 ### Example
 
@@ -49,6 +50,10 @@ function onDeviceReady() {
 
     MarketPlugin.search('productivity apps')
         .then(() => console.log('Opened market search'))
+        .catch(error => console.error('Error:', error));
+
+    MarketPlugin.requestReview()
+        .then(() => console.log('Review dialog requested'))
         .catch(error => console.error('Error:', error));
 }
 ```
@@ -64,6 +69,12 @@ Opens the market (App Store or Play Store) to the app page using the provided ap
 #### `search(query: string): Promise<void>`
 
 Performs a search in the App Store or Play Store using the provided query string.
+
+#### `requestReview(): Promise<void>`
+
+Requests an in-app review dialog. On iOS, this uses `SKStoreReviewController` to show the native App Store rating dialog. On Android, this uses the Google Play In-App Review API.
+
+**Note:** The OS may choose not to show the dialog (e.g., if it has been shown too recently). This is controlled by Apple/Google and cannot be overridden.
 
 ---
 

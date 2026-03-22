@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="community-cordova-plugin-market"
-        version="1.0.2">
+        version="1.0.3">
     <name>Cordova Plugin Plugin</name>
     <description></description>
     <license>MIT</license>
@@ -28,6 +28,7 @@
         <source-file src="src/android/MarketPlugin.java" target-dir="src/android" />
 
         <framework src="com.google.android.play:review:2.0.1" />
+        <framework src="com.google.android.gms:play-services-tasks:18.2.0" />
     </platform>
 
     <!-- ios -->

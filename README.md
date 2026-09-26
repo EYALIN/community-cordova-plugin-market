@@ -53,7 +53,7 @@ function onDeviceReady() {
         .catch(error => console.error('Error:', error));
 
     MarketPlugin.requestReview()
-        .then(() => console.log('Review dialog requested'))
+        .then(result => console.log('Review requested', result)) // Android: 'launched' | 'store_fallback'
         .catch(error => console.error('Error:', error));
 }
 ```
@@ -66,15 +66,41 @@ function onDeviceReady() {
 
 Opens the market (App Store or Play Store) to the app page using the provided application ID.
 
+- Android: `appId` is the package name (`com.example.app`). Opens `market://details?id=…`; if no app
+  handles it (no Play Store), opens `https://play.google.com/store/apps/details?id=…` instead.
+- iOS: `appId` is the App Store id with its `id` prefix (`id123456789`), optionally with a query
+  such as `id123456789?action=write-review`.
+- Rejects with `"Invalid app ID"` for an empty, `null` or `undefined` id.
+
 #### `search(query: string): Promise<void>`
 
-Performs a search in the App Store or Play Store using the provided query string.
+Performs a search in the App Store or Play Store using the provided query string (Android falls back
+to the https Play Store search page without a Play Store). Rejects `"Invalid search query"` when empty.
 
-#### `requestReview(): Promise<void>`
+#### `requestReview(): Promise<'launched' | 'store_fallback' | void>`
 
 Requests an in-app review dialog. On iOS, this uses `SKStoreReviewController` to show the native App Store rating dialog. On Android, this uses the Google Play In-App Review API.
 
 **Note:** The OS may choose not to show the dialog (e.g., if it has been shown too recently). This is controlled by Apple/Google and cannot be overridden.
+
+Android (1.0.5+):
+
+- The review sheet is launched on the UI thread only while the activity is resumed and not
+  finishing/destroyed; otherwise the promise rejects with `activity_not_resumed` and nothing opens.
+- Resolves `'launched'` when Play's flow completed (Play never says whether the sheet was shown or
+  what the user did), or `'store_fallback'` when the Play library threw `IllegalStateException` and
+  this app's own store listing was opened instead.
+- Rejects with `activity_not_resumed`, `no_package`, `request_failed: …` or `launch_failed: …`.
+- The callback is answered exactly once per call.
+
+iOS resolves with no value.
+
+### Properties
+
+#### `capabilities: { safeInAppReview: true }`
+
+Present from 1.0.5. `safeInAppReview === true` means the Android `requestReview()` above is the
+crash-safe implementation; on older versions `capabilities` is `undefined`.
 
 ---
 

@@ -2,13 +2,18 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="community-cordova-plugin-market"
-        version="1.0.4">
-    <name>Cordova Plugin Plugin</name>
-    <description></description>
+        version="1.0.5">
+    <name>Market</name>
+    <description>Open an app's store page, search the store, and request the native in-app review on Android and iOS.</description>
     <license>MIT</license>
-    <keywords></keywords>
-    <repo>https://github.com/eyalin/community-cordova-plugin-market.git</repo>
-    <issue>https://github.com/eyalin/community-cordova-plugin-market/issues</issue>
+    <keywords>cordova,market,play store,app store,in-app review,rate app</keywords>
+    <repo>https://github.com/EYALIN/community-cordova-plugin-market.git</repo>
+    <issue>https://github.com/EYALIN/community-cordova-plugin-market/issues</issue>
+
+    <engines>
+        <!-- Java 8 lambdas and AndroidX-era Play libraries (play:review 2.x, play-services-tasks 18.x). -->
+        <engine name="cordova-android" version=">=10.0.0" />
+    </engines>
 
     <!-- android -->
     <platform name="android">
@@ -27,6 +32,7 @@
 
         <source-file src="src/android/MarketPlugin.java" target-dir="src/android" />
 
+        <!-- 2.0.2 is the newest com.google.android.play:review on Maven Google (checked 2026-09-26). -->
         <framework src="com.google.android.play:review:2.0.2" />
         <framework src="com.google.android.gms:play-services-tasks:18.4.1" />
     </platform>

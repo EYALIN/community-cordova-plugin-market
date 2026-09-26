@@ -7,20 +7,26 @@
     // Optional: initialization logic
 }
 
+/** The first argument when it is a string; nil for a missing argument or a JS null (NSNull). */
+- (NSString *)stringArgument:(CDVInvokedUrlCommand *)command {
+    id value = [command.arguments firstObject];
+    return [value isKindOfClass:[NSString class]] ? (NSString *)value : nil;
+}
+
 - (void)open:(CDVInvokedUrlCommand *)command {
-    NSString *appId = [command.arguments firstObject];
+    // A JS null/undefined arrives as NSNull (or nothing): never send it -length.
+    NSString *appId = [self stringArgument:command];
+    NSString *trimmed = [appId stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     CDVPluginResult *pluginResult;
+    NSURL *appURL = nil;
+    if (trimmed.length > 0 && ![trimmed isEqualToString:@"null"]) {
+        appURL = [NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/%@", appId]];
+    }
 
-    if (appId && [appId length] > 0) {
-        NSString *url = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/%@", appId];
-        NSURL *appURL = [NSURL URLWithString:url];
-        UIApplication *application = [UIApplication sharedApplication];
-
-        if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
-            [application openURL:appURL options:@{} completionHandler:nil];
-        } else {
-            [application openURL:appURL];
-        }
+    if (appURL) {
+        // Cordova iOS targets iOS 11+, where openURL:options:completionHandler: always exists
+        // (the deprecated openURL: does nothing on iOS 18+).
+        [[UIApplication sharedApplication] openURL:appURL options:@{} completionHandler:nil];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {
@@ -31,20 +37,21 @@
 }
 
 - (void)search:(CDVInvokedUrlCommand *)command {
-    NSString *query = [command.arguments firstObject];
+    NSString *query = [self stringArgument:command];
     CDVPluginResult *pluginResult;
+    NSURL *appURL = nil;
+    if ([query stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0) {
+        // URLQueryAllowedCharacterSet keeps '&', '=', '+' and '#' literal, which would cut the term short.
+        NSMutableCharacterSet *allowed = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+        [allowed removeCharactersInString:@"&=+#?"];
+        NSString *encodedQuery = [query stringByAddingPercentEncodingWithAllowedCharacters:allowed];
+        appURL = [NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/search?term=%@", encodedQuery]];
+    }
 
-    if (query && [query length] > 0) {
-        NSString *encodedQuery = [query stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSString *url = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/search?term=%@", encodedQuery];
-        NSURL *appURL = [NSURL URLWithString:url];
-        UIApplication *application = [UIApplication sharedApplication];
-
-        if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
-            [application openURL:appURL options:@{} completionHandler:nil];
-        } else {
-            [application openURL:appURL];
-        }
+    if (appURL) {
+        // Cordova iOS targets iOS 11+, where openURL:options:completionHandler: always exists
+        // (the deprecated openURL: does nothing on iOS 18+).
+        [[UIApplication sharedApplication] openURL:appURL options:@{} completionHandler:nil];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {

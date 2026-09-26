@@ -1,18 +1,46 @@
 {
   "name": "community-cordova-plugin-market",
-  "version": "1.0.4",
+  "version": "1.0.5",
+  "description": "Cordova plugin to open an app's store page, search the store, and request the native in-app review (Google Play In-App Review / SKStoreReviewController) on Android and iOS.",
   "types": "./types/index.d.ts",
   "readme": "README.md",
-  "repository": "EYALIN/community-cordova-plugin-market/tree/master",
-  "homepage": "https://github.com/EYALIN/community-cordova-plugin-market/tree/master",
+  "license": "MIT",
+  "author": "eyalin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EYALIN/community-cordova-plugin-market.git"
+  },
+  "homepage": "https://github.com/EYALIN/community-cordova-plugin-market#readme",
   "funding": "https://github.com/sponsors/EYALIN",
-  "bugs": "https://github.com/EYALIN/community-cordova-plugin-market/issues",
+  "bugs": {
+    "url": "https://github.com/EYALIN/community-cordova-plugin-market/issues"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova",
+    "market",
+    "play-store",
+    "app-store",
+    "in-app-review",
+    "rate-app"
+  ],
+  "files": [
+    "plugin.xml",
+    "www/",
+    "src/",
+    "types/",
+    "README.md",
+    "CHANGELOG.md",
+    "RELEASENOTES.md",
+    "LICENSE"
+  ],
   "cordova": {
     "id": "community-cordova-plugin-market",
     "platforms": [
       "android",
       "ios"
     ]
-  },
-  "description": "A plugin for navigating the store"
+  }
 }
